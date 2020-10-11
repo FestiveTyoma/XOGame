@@ -2,7 +2,7 @@ package com.example.xogame;
 
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import java.util.Random;
@@ -91,9 +91,9 @@ public class MainActivity extends AppCompatActivity {
                 //Toast.makeText(this, "Установил в cеLLs X ["+clickedPoint.getX()+"]["+clickedPoint.getY()+"]", Toast.LENGTH_SHORT).show();
                 clickedButton.setText("X");
                 if (isGetLine(Type.X)) {
-                    Toast.makeText(this, "Крестики победили", Toast.LENGTH_SHORT).show();
+                    endDialog();
                 } else if (isTie()) {
-                    Toast.makeText(this, "Ничья", Toast.LENGTH_SHORT).show();
+                    endDialog();
                 }
             }
         }
@@ -127,9 +127,9 @@ public class MainActivity extends AppCompatActivity {
         //Toast.makeText(this, "Установил в cеLLs O ["+randomGetXX+"]["+randomGetYY+"]", Toast.LENGTH_SHORT).show();
         buttons[randomGetXX][randomGetYY].setText(point);
         if (isGetLine(Type.O)) {
-            Toast.makeText(this, "Нолики победили", Toast.LENGTH_SHORT).show();
+            endDialog();
         } else if (isTie()) {
-            Toast.makeText(this, "Ничья", Toast.LENGTH_SHORT).show();
+            endDialog();
         }
     }
 
@@ -171,6 +171,25 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
+    public void endDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        if (isGetLine(Type.X)) {
+            builder.setMessage("Крестики победили! Будешь ещё?");
+        }
+        if (isGetLine(Type.O)) {
+            builder.setMessage("Нолики победили! Будешь ещё?");
+        }
+        if (isTie()) {
+            builder.setMessage("Ничья! Будешь ещё?");
+        }
+        builder.setPositiveButton("Да", (dialog, which) -> recreate());
+        builder.setNegativeButton("Нет", (dialog, which) -> onPause());
+        builder.create().show();
+
+    }
+
+
 }
 
 
