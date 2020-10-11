@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">XOGame</string>
+    <string name="radioName">Игрок</string>
+    <string name="radioName1">Компьютер</string>
+    <string name="textButtonGame">Новая игра</string>
+    <string name="dialogForExamples">\"Ошибка, попробуйте позже</string>
+    <string name="posButOk">OK</string>
+</resources>
