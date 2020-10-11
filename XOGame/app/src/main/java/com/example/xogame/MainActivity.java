@@ -8,8 +8,11 @@ import android.os.Bundle;
 import java.util.Random;
 
 
+
 public class MainActivity extends AppCompatActivity {
     private static final int SIZE = 3;
+    int locCountX=0;
+    int locCountO=0;
     private int counterO = 0;
     public enum Type {X, O, NOT_SET}
     private final Button[][] buttons = new Button[SIZE][SIZE];
@@ -51,7 +54,10 @@ public class MainActivity extends AppCompatActivity {
             Button clickedButton = (Button) myView;
             Point clickedPoint = getClickedPoint(clickedButton);
             doUserShoot(clickedButton, clickedPoint);
-            checkAmountCompPointAndSetIt();
+            if (locCountX >locCountO) {
+                checkAmountCompPointAndSetIt();
+            }
+
         };
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE; j++) {
@@ -60,6 +66,8 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
+
 
     private void checkAmountCompPointAndSetIt() {
         if (counterO < 4) {
@@ -88,6 +96,7 @@ public class MainActivity extends AppCompatActivity {
             String numberStr = clickedButton.getText().toString();
             if (numberStr.equals("")) {
                 cells[clickedPoint.getX()][clickedPoint.getY()] = Type.X;
+                locCountX++;
                 //Toast.makeText(this, "Установил в cеLLs X ["+clickedPoint.getX()+"]["+clickedPoint.getY()+"]", Toast.LENGTH_SHORT).show();
                 clickedButton.setText("X");
                 if (isGetLine(Type.X)) {
@@ -126,6 +135,7 @@ public class MainActivity extends AppCompatActivity {
         cells[randomGetXX][randomGetYY] = Type.O;
         //Toast.makeText(this, "Установил в cеLLs O ["+randomGetXX+"]["+randomGetYY+"]", Toast.LENGTH_SHORT).show();
         buttons[randomGetXX][randomGetYY].setText(point);
+        locCountO++;
         if (isGetLine(Type.O)) {
             endDialog();
         } else if (isTie()) {
