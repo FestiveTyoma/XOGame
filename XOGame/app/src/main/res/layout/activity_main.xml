@@ -48,21 +48,6 @@
                   android:background="#009688">
             <Button
                     style="android:attr/buttonBarButtonStyle"
-                    android:id="@+id/button9"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:layout_weight="1"
-                    android:backgroundTint="#C2F4C4"
-                    android:gravity="center"
-                    android:layout_gravity="center"
-                    android:textColor="#000000"
-                    android:textSize="36sp"
-                    android:padding="1dp"
-                    android:textStyle="bold"
-
-            />
-            <Button
-                    style="android:attr/buttonBarButtonStyle"
                     android:id="@+id/button1"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
@@ -87,9 +72,6 @@
                     android:textColor="#000000"
                     android:textSize="36sp"
                     android:textStyle="bold"/>
-        </TableRow>
-        <TableRow android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_weight="1"
-                  android:background="#009688">
             <Button
                     style="android:attr/buttonBarButtonStyle"
                     android:id="@+id/button3"
@@ -103,6 +85,9 @@
                     android:textColor="#000000"
                     android:textSize="36sp"
                     android:textStyle="bold"/>
+        </TableRow>
+        <TableRow android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_weight="1"
+                  android:background="#009688">
             <Button
                     style="android:attr/buttonBarButtonStyle"
                     android:id="@+id/button4"
@@ -129,9 +114,6 @@
                     android:textColor="#000000"
                     android:textSize="36sp"
                     android:textStyle="bold"/>
-        </TableRow>
-        <TableRow android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_weight="1"
-                  android:background="#009688">
             <Button
                     style="android:attr/buttonBarButtonStyle"
                     android:id="@+id/button6"
@@ -145,6 +127,9 @@
                     android:textColor="#000000"
                     android:textSize="36sp"
                     android:textStyle="bold"/>
+        </TableRow>
+        <TableRow android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_weight="1"
+                  android:background="#009688">
             <Button
                     style="android:attr/buttonBarButtonStyle"
                     android:id="@+id/button7"
@@ -171,6 +156,21 @@
                     android:textColor="#000000"
                     android:textSize="36sp"
                     android:textStyle="bold"/>
+            <Button
+                    style="android:attr/buttonBarButtonStyle"
+                    android:id="@+id/button9"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="#C2F4C4"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:textColor="#000000"
+                    android:textSize="36sp"
+                    android:padding="1dp"
+                    android:textStyle="bold"
+
+            />
         </TableRow>
     </TableLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
