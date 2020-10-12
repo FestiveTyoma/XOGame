@@ -10,10 +10,11 @@ import java.util.Random;
 
 
 public class MainActivity extends AppCompatActivity {
+    Button b1, b2, b3, b4, b5, b6, b7, b8, b9;
     private static final int SIZE = 3;
-    int locCountX=0;
-    int locCountO=0;
-    private int counterO = 0;
+    private int locCountX;
+    private int locCountO;
+    private int counterO;
     public enum Type {X, O, NOT_SET}
     private final Button[][] buttons = new Button[SIZE][SIZE];
     private Type[][] cells;
@@ -28,12 +29,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private boolean isTie() {
-        for (Type[] row : cells) {
-            for (Type c : row) {
-                if (c.equals(Type.NOT_SET)) {
-                    return false;
+        boolean p = !isGetLine(Type.X) && !isGetLine(Type.O);
+        if (p) {
+            for (Type[] row : cells) {
+                for (Type c : row) {
+                    if (c.equals(Type.NOT_SET)) {
+                        return false;
+                    }
                 }
             }
+        } else {
+            return false;
         }
         return true;
     }
@@ -86,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void setListenerOnNewGame() {
         Button newGameButton = findViewById(R.id.newGameButton);
-        View.OnClickListener oclNegGameButton = v -> recreate();
+        View.OnClickListener oclNegGameButton = v -> initArray();
         newGameButton.setOnClickListener(oclNegGameButton);
 
     }
@@ -101,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
                 clickedButton.setText("X");
                 if (isGetLine(Type.X)) {
                     endDialog();
-                } else if (isTie()) {
+                }  if (isTie() ) {
                     endDialog();
                 }
             }
@@ -138,14 +144,15 @@ public class MainActivity extends AppCompatActivity {
         locCountO++;
         if (isGetLine(Type.O)) {
             endDialog();
-        } else if (isTie()) {
+        }  if (isTie()) {
             endDialog();
         }
     }
 
     private void initArray() {
-
-        Button b1, b2, b3, b4, b5, b6, b7, b8, b9;
+         locCountX=0;
+        locCountO=0;
+        counterO=0;
         b1 = findViewById(R.id.button1);
         b2 = findViewById(R.id.button2);
         b3 = findViewById(R.id.button3);
@@ -193,9 +200,22 @@ public class MainActivity extends AppCompatActivity {
         if (isTie()) {
             builder.setMessage("Ничья! Будешь ещё?");
         }
-        builder.setPositiveButton("Да", (dialog, which) -> recreate());
-        builder.setNegativeButton("Нет", (dialog, which) -> onPause());
+        builder.setPositiveButton("Да", (dialog, which) -> initArray());
+        builder.setNegativeButton("Нет", (dialog, which) -> freeze());
         builder.create().show();
+
+    }
+
+    private void freeze() {
+        b1.setClickable(false);
+        b2.setClickable(false);
+        b3.setClickable(false);
+        b4.setClickable(false);
+        b5.setClickable(false);
+        b6.setClickable(false);
+        b7.setClickable(false);
+        b8.setClickable(false);
+        b9.setClickable(false);
 
     }
 
