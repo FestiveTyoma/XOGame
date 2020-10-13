@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
             Button clickedButton = (Button) myView;
             Point clickedPoint = getClickedPoint(clickedButton);
             doUserShoot(clickedButton, clickedPoint);
-            if (locCountX >locCountO) {
+            if ((locCountX >locCountO) && !isGetLine(Type.X)) {
                 checkAmountCompPointAndSetIt();
             }
 
@@ -92,7 +92,10 @@ public class MainActivity extends AppCompatActivity {
 
     private void setListenerOnNewGame() {
         Button newGameButton = findViewById(R.id.newGameButton);
-        View.OnClickListener oclNegGameButton = v -> initArray();
+        View.OnClickListener oclNegGameButton = v -> {
+            freeze(true);
+            initArray();
+        };
         newGameButton.setOnClickListener(oclNegGameButton);
 
     }
@@ -201,21 +204,21 @@ public class MainActivity extends AppCompatActivity {
             builder.setMessage("Ничья! Будешь ещё?");
         }
         builder.setPositiveButton("Да", (dialog, which) -> initArray());
-        builder.setNegativeButton("Нет", (dialog, which) -> freeze());
+        builder.setNegativeButton("Нет", (dialog, which) -> freeze(false));
         builder.create().show();
 
     }
 
-    private void freeze() {
-        b1.setClickable(false);
-        b2.setClickable(false);
-        b3.setClickable(false);
-        b4.setClickable(false);
-        b5.setClickable(false);
-        b6.setClickable(false);
-        b7.setClickable(false);
-        b8.setClickable(false);
-        b9.setClickable(false);
+    private void freeze(boolean clickable) {
+        b1.setClickable(clickable);
+        b2.setClickable(clickable);
+        b3.setClickable(clickable);
+        b4.setClickable(clickable);
+        b5.setClickable(clickable);
+        b6.setClickable(clickable);
+        b7.setClickable(clickable);
+        b8.setClickable(clickable);
+        b9.setClickable(clickable);
 
     }
 
