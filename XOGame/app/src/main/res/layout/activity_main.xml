@@ -21,15 +21,30 @@
             android:gravity="top" app:layout_constraintVertical_bias="0.009" android:layout_marginTop="8dp">
         <RadioGroup
                 android:layout_width="49dp"
-                android:layout_height="wrap_content" android:layout_weight="1">
-            <RadioButton
-                    android:text="@string/radioName1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" android:id="@+id/radioButton1" android:layout_weight="1"/>
+                android:layout_height="wrap_content" android:layout_weight="1" android:id="@+id/compAndUser">
             <RadioButton
                     android:text="@string/radioName"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" android:id="@+id/radioButton2" android:layout_weight="1"/>
+                    android:layout_height="wrap_content" android:id="@+id/user" android:layout_weight="1"/>
+            <RadioButton
+                    android:text="@string/radioName1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:id="@+id/computer" android:layout_weight="1"/>
+            <RadioGroup
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" android:layout_weight="1" android:id="@+id/levelComp">
+                <RadioButton
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" android:id="@+id/easy" android:text="@string/easy"/>
+                <RadioButton
+                        android:text="@string/medium"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" android:id="@+id/medium"/>
+                <RadioButton
+                        android:text="@string/hard"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" android:id="@+id/hard"/>
+            </RadioGroup>
         </RadioGroup>
         <Button
                 android:text="@string/textButtonGame"

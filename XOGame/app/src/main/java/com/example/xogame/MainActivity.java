@@ -2,6 +2,9 @@ package com.example.xogame;
 
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,6 +21,8 @@ public class MainActivity extends AppCompatActivity {
     private int tempI;
     private int tempJ;
 
+    public int LevelComp ;
+
     public enum Type {X, O, NOT_SET}
 
     private final Button[][] buttons = new Button[SIZE][SIZE];
@@ -30,6 +35,43 @@ public class MainActivity extends AppCompatActivity {
         initArray();
         setListenerOnButtons();
         setListenerOnNewGame();
+        setListenerOnRadioGroup();
+    }
+
+    private void setListenerOnRadioGroup() {
+        RadioGroup compAndUser = findViewById(R.id.compAndUser);
+        RadioButton user = findViewById(R.id.user);
+        RadioButton computer = findViewById(R.id.computer);
+        RadioGroup levelComp = findViewById(R.id.levelComp);
+        RadioButton easy = findViewById(R.id.easy);
+        RadioButton medium = findViewById(R.id.medium);
+        RadioButton hard = findViewById(R.id.hard);
+        CompoundButton.OnCheckedChangeListener levelListener = (buttonView, isChecked) -> {
+            if (easy.isChecked()) {
+                LevelComp = 1;
+            }
+            if (medium.isChecked()) {
+                LevelComp = 2;
+
+            }
+            if (hard.isChecked()) {
+                LevelComp=3;
+
+            }
+        };
+        CompoundButton.OnCheckedChangeListener occl = (buttonView, isChecked) -> {
+            computer.setChecked(true);
+            user.setClickable(false);
+
+                easy.setChecked(true);
+
+            };
+
+        computer.setOnCheckedChangeListener(occl);
+        easy.setOnCheckedChangeListener(levelListener);
+        medium.setOnCheckedChangeListener(levelListener);
+        hard.setOnCheckedChangeListener(levelListener);
+
     }
 
     private boolean isTie() {
@@ -185,6 +227,7 @@ public class MainActivity extends AppCompatActivity {
         View.OnClickListener oclNegGameButton = v -> {
             freeze(true);
             initArray();
+            
         };
         newGameButton.setOnClickListener(oclNegGameButton);
 
@@ -224,20 +267,16 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void getComputerPoint(String point) {
-        if (isAlmostWins()) {
-            buttons[tempI][tempJ].setText(point);
-        } else {
-            Random random = new Random();
-            int randomGetYY;
-            int randomGetXX;
-            do {
-                randomGetXX = (random.nextInt(SIZE));
-                randomGetYY = (random.nextInt(SIZE));
-            } while ((!cells[randomGetXX][randomGetYY].equals(Type.NOT_SET)));
-            cells[randomGetXX][randomGetYY] = Type.O;
-            //Toast.makeText(this, "Установил в cеLLs O ["+randomGetXX+"]["+randomGetYY+"]", Toast.LENGTH_SHORT).show();
-            buttons[randomGetXX][randomGetYY].setText(point);
+        switch (LevelComp) {
+            case 1:
+                getRandomComputerPoint(point);
+                break;
+            case 2:
+                setBlockOrRandomPoint(point);
+            case 3:
+               // doThis();
         }
+       // setBlockOrRandomPoint(point);
         locCountO++;
         if (isGetLine(Type.O)) {
             endDialog();
@@ -245,6 +284,27 @@ public class MainActivity extends AppCompatActivity {
         if (isTie()) {
             endDialog();
         }
+    }
+
+    private void setBlockOrRandomPoint(String point) {
+        if (isAlmostWins()) {
+            buttons[tempI][tempJ].setText(point);
+        } else {
+            getRandomComputerPoint(point);
+        }
+    }
+
+    private void getRandomComputerPoint(String point) {
+        Random random = new Random();
+        int randomGetYY;
+        int randomGetXX;
+        do {
+            randomGetXX = (random.nextInt(SIZE));
+            randomGetYY = (random.nextInt(SIZE));
+        } while ((!cells[randomGetXX][randomGetYY].equals(Type.NOT_SET)));
+        cells[randomGetXX][randomGetYY] = Type.O;
+        //Toast.makeText(this, "Установил в cеLLs O ["+randomGetXX+"]["+randomGetYY+"]", Toast.LENGTH_SHORT).show();
+        buttons[randomGetXX][randomGetYY].setText(point);
     }
 
 

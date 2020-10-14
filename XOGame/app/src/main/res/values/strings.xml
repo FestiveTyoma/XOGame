@@ -5,4 +5,7 @@
     <string name="textButtonGame">Новая игра</string>
     <string name="dialogForExamples">\"Ошибка, попробуйте позже</string>
     <string name="posButOk">OK</string>
+    <string name="easy">Лёгкий</string>
+    <string name="medium">Средний</string>
+    <string name="hard">Сложный</string>
 </resources>
