@@ -5,8 +5,8 @@ import android.widget.Button;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import java.util.Random;
 
+import java.util.Random;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -15,7 +15,11 @@ public class MainActivity extends AppCompatActivity {
     private int locCountX;
     private int locCountO;
     private int counterO;
+    private int tempI;
+    private int tempJ;
+
     public enum Type {X, O, NOT_SET}
+
     private final Button[][] buttons = new Button[SIZE][SIZE];
     private Type[][] cells;
 
@@ -44,7 +48,91 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    public boolean isGetLine(Type x) {
+    public boolean isAlmostWins() {
+
+        for (int i = 0; i < SIZE; i++) {
+            int count = 0;
+            for (int j = 0; j < SIZE; j++) {
+                if (cells[i][j].equals(Type.X)) {
+                    count++;
+                }
+                if (cells[i][j].equals(Type.NOT_SET)) {
+                    tempI = i;
+                    tempJ = j;
+                }
+            }
+            if (count == 2 && cells[tempI][tempJ].equals(Type.NOT_SET)) {
+                cells[tempI][tempJ] = Type.O;
+                return true;
+            }
+        }
+        for (int i = 0; i < SIZE; i++) {
+            int count = 0;
+            for (int j = 0; j < SIZE; j++) {
+                if (cells[j][i].equals(Type.X)) {
+                    count++;
+                }
+                if (cells[j][i].equals(Type.NOT_SET)) {
+                    tempI = j;
+                    tempJ = i;
+                }
+            }
+            if (count == 2 && cells[tempI][tempJ].equals(Type.NOT_SET)) {
+                cells[tempI][tempJ] = Type.O;
+                return true;
+            }
+        }
+
+        if (cells[0][0].equals(Type.X) && cells[1][1].equals(Type.X)) {
+            cells[2][2] = Type.O;
+            tempI = 2;
+            tempJ = 2;
+            return true;
+        }
+        if (cells[0][0].equals(Type.X) && cells[2][2].equals(Type.X)) {
+            cells[1][1] = Type.O;
+            tempI = 1;
+            tempJ = 1;
+            return true;
+        }
+        if (cells[1][1].equals(Type.X) && cells[2][2].equals(Type.X)) {
+            cells[0][0] = Type.O;
+            tempI = 0;
+            tempJ = 0;
+            return true;
+        }
+        if (cells[0][2].equals(Type.X) && cells[1][1].equals(Type.X)) {
+            cells[2][0] = Type.O;
+            tempI = 2;
+            tempJ = 0;
+            return true;
+        }
+        if (cells[0][2].equals(Type.X) && cells[2][0].equals(Type.X)) {
+            cells[1][1] = Type.O;
+            tempI = 1;
+            tempJ = 1;
+            return true;
+        }
+        if (cells[1][1].equals(Type.X) && cells[2][0].equals(Type.X)) {
+            cells[0][2] = Type.O;
+            tempI = 0;
+            tempJ = 2;
+            return true;
+        }
+        return false;
+    }
+
+       /* (((cells[0][0] == x && (cells[0][1] == x  || cells[0][2] == x)) || cells[0][1] == x && cells[0][2] == x) ||
+                ((cells[1][0] == x && (cells[1][1] == x  || cells[1][2] == x)) || cells[1][1] == x && cells[1][2] == x) ||
+                ((cells[2][0] == x && (cells[2][1] == x  || cells[2][2] == x)) || cells[2][1] == x && cells[2][2] == x) ||
+                ((cells[0][0] == x && (cells[1][0] == x  || cells[2][0] == x)) || cells[1][0] == x && cells[2][0] == x) ||
+                ((cells[0][1] == x && (cells[1][1] == x  || cells[2][1] == x)) || cells[1][1] == x && cells[2][1] == x) ||
+                ((cells[0][2] == x && (cells[1][2] == x  || cells[2][2] == x)) || cells[1][2] == x && cells[2][2] == x) ||
+                ((cells[0][0] == x && (cells[1][1] == x  || cells[2][2] == x)) || cells[1][1] == x && cells[2][2] == x) ||
+                ((cells[0][2] == x && (cells[1][1] == x  || cells[2][0] == x)) || cells[1][1] == x && cells[2][0] == x));
+    */
+
+    private boolean isGetLine(Type x) {
         return ((cells[0][0] == x && cells[0][1] == x && cells[0][2] == x) ||
                 (cells[1][0] == x && cells[1][1] == x && cells[1][2] == x) ||
                 (cells[2][0] == x && cells[2][1] == x && cells[2][2] == x) ||
@@ -53,14 +141,17 @@ public class MainActivity extends AppCompatActivity {
                 (cells[0][2] == x && cells[1][2] == x && cells[2][2] == x) ||
                 (cells[0][0] == x && cells[1][1] == x && cells[2][2] == x) ||
                 (cells[2][0] == x && cells[1][1] == x && cells[0][2] == x));
+
     }
+
+
     private void setListenerOnButtons() {
 
         View.OnClickListener listener = myView -> {
             Button clickedButton = (Button) myView;
             Point clickedPoint = getClickedPoint(clickedButton);
             doUserShoot(clickedButton, clickedPoint);
-            if ((locCountX >locCountO) && !isGetLine(Type.X)) {
+            if ((locCountX > locCountO) && !isGetLine(Type.X)) {
                 checkAmountCompPointAndSetIt();
             }
 
@@ -72,7 +163,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-
 
 
     private void checkAmountCompPointAndSetIt() {
@@ -110,7 +200,8 @@ public class MainActivity extends AppCompatActivity {
                 clickedButton.setText("X");
                 if (isGetLine(Type.X)) {
                     endDialog();
-                }  if (isTie() ) {
+                }
+                if (isTie()) {
                     endDialog();
                 }
             }
@@ -133,29 +224,36 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void getComputerPoint(String point) {
-        Random random = new Random();
-        int randomGetYY;
-        int randomGetXX;
-        do {
-            randomGetXX = (random.nextInt(SIZE));
-            randomGetYY = (random.nextInt(SIZE));
-
-        } while ((!cells[randomGetXX][randomGetYY].equals(Type.NOT_SET)));
-        cells[randomGetXX][randomGetYY] = Type.O;
-        //Toast.makeText(this, "Установил в cеLLs O ["+randomGetXX+"]["+randomGetYY+"]", Toast.LENGTH_SHORT).show();
-        buttons[randomGetXX][randomGetYY].setText(point);
+        if (isAlmostWins()) {
+            buttons[tempI][tempJ].setText(point);
+        } else {
+            Random random = new Random();
+            int randomGetYY;
+            int randomGetXX;
+            do {
+                randomGetXX = (random.nextInt(SIZE));
+                randomGetYY = (random.nextInt(SIZE));
+            } while ((!cells[randomGetXX][randomGetYY].equals(Type.NOT_SET)));
+            cells[randomGetXX][randomGetYY] = Type.O;
+            //Toast.makeText(this, "Установил в cеLLs O ["+randomGetXX+"]["+randomGetYY+"]", Toast.LENGTH_SHORT).show();
+            buttons[randomGetXX][randomGetYY].setText(point);
+        }
         locCountO++;
         if (isGetLine(Type.O)) {
             endDialog();
-        }  if (isTie()) {
+        }
+        if (isTie()) {
             endDialog();
         }
     }
 
+
     private void initArray() {
-         locCountX=0;
-        locCountO=0;
-        counterO=0;
+        locCountX = 0;
+        locCountO = 0;
+        counterO = 0;
+        tempI = 0;
+        tempJ = 0;
         b1 = findViewById(R.id.button1);
         b2 = findViewById(R.id.button2);
         b3 = findViewById(R.id.button3);
