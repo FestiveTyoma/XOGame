@@ -21,12 +21,18 @@ public class MainActivity extends AppCompatActivity {
     private int tempI;
     private int tempJ;
 
-    public int LevelComp ;
+    public int LevelComp = 1;
 
     public enum Type {X, O, NOT_SET}
 
     private final Button[][] buttons = new Button[SIZE][SIZE];
     private Type[][] cells;
+    // RadioButton user;
+    RadioButton easy;
+    RadioButton medium;
+    RadioButton hard;
+    // RadioGroup compAndUser;
+    RadioGroup levelComp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,14 +45,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setListenerOnRadioGroup() {
-        RadioGroup compAndUser = findViewById(R.id.compAndUser);
-        RadioButton user = findViewById(R.id.user);
-        RadioButton computer = findViewById(R.id.computer);
-        RadioGroup levelComp = findViewById(R.id.levelComp);
-        RadioButton easy = findViewById(R.id.easy);
-        RadioButton medium = findViewById(R.id.medium);
-        RadioButton hard = findViewById(R.id.hard);
+        // compAndUser = findViewById(R.id.compAndUser);
+        // user = findViewById(R.id.user);
+        levelComp = findViewById(R.id.levelComp);
+        easy = findViewById(R.id.easy);
+        medium = findViewById(R.id.medium);
+        hard = findViewById(R.id.hard);
         CompoundButton.OnCheckedChangeListener levelListener = (buttonView, isChecked) -> {
+
             if (easy.isChecked()) {
                 LevelComp = 1;
             }
@@ -55,24 +61,14 @@ public class MainActivity extends AppCompatActivity {
 
             }
             if (hard.isChecked()) {
-                LevelComp=3;
-
+                LevelComp = 3;
             }
         };
-        CompoundButton.OnCheckedChangeListener occl = (buttonView, isChecked) -> {
-            computer.setChecked(true);
-            user.setClickable(false);
-
-                easy.setChecked(true);
-
-            };
-
-        computer.setOnCheckedChangeListener(occl);
         easy.setOnCheckedChangeListener(levelListener);
         medium.setOnCheckedChangeListener(levelListener);
         hard.setOnCheckedChangeListener(levelListener);
-
     }
+
 
     private boolean isTie() {
         boolean p = !isGetLine(Type.X) && !isGetLine(Type.O);
@@ -90,12 +86,12 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    public boolean isAlmostWins() {
+    public boolean isAlmostWins(Type pointForCheck, Type pointForSet) {
 
         for (int i = 0; i < SIZE; i++) {
             int count = 0;
             for (int j = 0; j < SIZE; j++) {
-                if (cells[i][j].equals(Type.X)) {
+                if (cells[i][j].equals(pointForCheck)) {
                     count++;
                 }
                 if (cells[i][j].equals(Type.NOT_SET)) {
@@ -104,14 +100,14 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
             if (count == 2 && cells[tempI][tempJ].equals(Type.NOT_SET)) {
-                cells[tempI][tempJ] = Type.O;
+                cells[tempI][tempJ] = pointForSet;
                 return true;
             }
         }
         for (int i = 0; i < SIZE; i++) {
             int count = 0;
             for (int j = 0; j < SIZE; j++) {
-                if (cells[j][i].equals(Type.X)) {
+                if (cells[j][i].equals(pointForCheck)) {
                     count++;
                 }
                 if (cells[j][i].equals(Type.NOT_SET)) {
@@ -120,43 +116,43 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
             if (count == 2 && cells[tempI][tempJ].equals(Type.NOT_SET)) {
-                cells[tempI][tempJ] = Type.O;
+                cells[tempI][tempJ] = pointForSet;
                 return true;
             }
         }
 
-        if (cells[0][0].equals(Type.X) && cells[1][1].equals(Type.X)) {
-            cells[2][2] = Type.O;
+        if (cells[0][0].equals(pointForCheck) && cells[1][1].equals(pointForCheck) && cells[2][2].equals(Type.NOT_SET)) {
+            cells[2][2] = pointForSet;
             tempI = 2;
             tempJ = 2;
             return true;
         }
-        if (cells[0][0].equals(Type.X) && cells[2][2].equals(Type.X)) {
-            cells[1][1] = Type.O;
+        if (cells[0][0].equals(pointForCheck) && cells[2][2].equals(pointForCheck) && cells[1][1].equals(Type.NOT_SET)) {
+            cells[1][1] = pointForSet;
             tempI = 1;
             tempJ = 1;
             return true;
         }
-        if (cells[1][1].equals(Type.X) && cells[2][2].equals(Type.X)) {
-            cells[0][0] = Type.O;
+        if (cells[1][1].equals(pointForCheck) && cells[2][2].equals(pointForCheck) && cells[0][0].equals(Type.NOT_SET)) {
+            cells[0][0] = pointForSet;
             tempI = 0;
             tempJ = 0;
             return true;
         }
-        if (cells[0][2].equals(Type.X) && cells[1][1].equals(Type.X)) {
-            cells[2][0] = Type.O;
+        if (cells[0][2].equals(pointForCheck) && cells[1][1].equals(pointForCheck) && cells[2][0].equals(Type.NOT_SET)) {
+            cells[2][0] = pointForSet;
             tempI = 2;
             tempJ = 0;
             return true;
         }
-        if (cells[0][2].equals(Type.X) && cells[2][0].equals(Type.X)) {
-            cells[1][1] = Type.O;
+        if (cells[0][2].equals(pointForCheck) && cells[2][0].equals(pointForCheck) && cells[1][1].equals(Type.NOT_SET)) {
+            cells[1][1] = pointForSet;
             tempI = 1;
             tempJ = 1;
             return true;
         }
-        if (cells[1][1].equals(Type.X) && cells[2][0].equals(Type.X)) {
-            cells[0][2] = Type.O;
+        if (cells[1][1].equals(pointForCheck) && cells[2][0].equals(pointForCheck) && cells[0][2].equals(Type.NOT_SET)) {
+            cells[0][2] = pointForSet;
             tempI = 0;
             tempJ = 2;
             return true;
@@ -183,12 +179,9 @@ public class MainActivity extends AppCompatActivity {
                 (cells[0][2] == x && cells[1][2] == x && cells[2][2] == x) ||
                 (cells[0][0] == x && cells[1][1] == x && cells[2][2] == x) ||
                 (cells[2][0] == x && cells[1][1] == x && cells[0][2] == x));
-
     }
 
-
     private void setListenerOnButtons() {
-
         View.OnClickListener listener = myView -> {
             Button clickedButton = (Button) myView;
             Point clickedPoint = getClickedPoint(clickedButton);
@@ -196,7 +189,6 @@ public class MainActivity extends AppCompatActivity {
             if ((locCountX > locCountO) && !isGetLine(Type.X)) {
                 checkAmountCompPointAndSetIt();
             }
-
         };
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE; j++) {
@@ -205,7 +197,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-
 
     private void checkAmountCompPointAndSetIt() {
         if (counterO < 4) {
@@ -221,16 +212,14 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
     private void setListenerOnNewGame() {
         Button newGameButton = findViewById(R.id.newGameButton);
         View.OnClickListener oclNegGameButton = v -> {
             freeze(true);
             initArray();
-            
+
         };
         newGameButton.setOnClickListener(oclNegGameButton);
-
     }
 
     private void doUserShoot(Button clickedButton, Point clickedPoint) {
@@ -265,7 +254,6 @@ public class MainActivity extends AppCompatActivity {
         return null;
     }
 
-
     private void getComputerPoint(String point) {
         switch (LevelComp) {
             case 1:
@@ -273,10 +261,11 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case 2:
                 setBlockOrRandomPoint(point);
+                break;
             case 3:
-               // doThis();
+                setSmartPoint(point);
+                break;
         }
-       // setBlockOrRandomPoint(point);
         locCountO++;
         if (isGetLine(Type.O)) {
             endDialog();
@@ -286,8 +275,36 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void setSmartPoint(String point) {
+        if (!isAlmostWins(Type.X, Type.O)) {
+            if (isAlmostWins(Type.O, Type.O)) {
+            } else if (cells[1][1].equals(Type.NOT_SET)) {
+                cells[1][1] = Type.O;
+                tempI = 1;
+                tempJ = 1;
+            } else if (cells[0][0].equals(Type.NOT_SET)) {
+                cells[0][0] = Type.O;
+                tempI = 0;
+                tempJ = 0;
+            } else if (cells[0][2].equals(Type.NOT_SET)) {
+                cells[0][2] = Type.O;
+                tempI = 0;
+                tempJ = 2;
+            } else if (cells[2][2].equals(Type.NOT_SET)) {
+                cells[2][2] = Type.O;
+                tempI = 2;
+                tempJ = 2;
+            } else if (cells[2][0].equals(Type.NOT_SET)) {
+                cells[2][0] = Type.O;
+                tempI = 2;
+                tempJ = 0;
+            }
+        }
+        buttons[tempI][tempJ].setText(point);
+    }
+
     private void setBlockOrRandomPoint(String point) {
-        if (isAlmostWins()) {
+        if (isAlmostWins(Type.X, Type.O)) {
             buttons[tempI][tempJ].setText(point);
         } else {
             getRandomComputerPoint(point);
@@ -364,7 +381,6 @@ public class MainActivity extends AppCompatActivity {
         builder.setPositiveButton("Да", (dialog, which) -> initArray());
         builder.setNegativeButton("Нет", (dialog, which) -> freeze(false));
         builder.create().show();
-
     }
 
     private void freeze(boolean clickable) {
@@ -377,10 +393,7 @@ public class MainActivity extends AppCompatActivity {
         b7.setClickable(clickable);
         b8.setClickable(clickable);
         b9.setClickable(clickable);
-
     }
-
-
 }
 
 

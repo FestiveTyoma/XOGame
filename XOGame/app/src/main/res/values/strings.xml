@@ -8,4 +8,5 @@
     <string name="easy">Лёгкий</string>
     <string name="medium">Средний</string>
     <string name="hard">Сложный</string>
+    <string name="textComputer">Компьютер</string>
 </resources>
