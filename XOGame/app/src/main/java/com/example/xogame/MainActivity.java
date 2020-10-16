@@ -87,17 +87,56 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public boolean isAlmostWins(Type pointForCheck, Type pointForSet) {
+        if (cells[0][0].equals(pointForCheck) && cells[1][1].equals(pointForCheck) && cells[2][2].equals(Type.NOT_SET)) {
+            cells[2][2] = pointForSet;
+            tempI = 2;
+            tempJ = 2;
+            return true;
+        }
+        else if (cells[0][0].equals(pointForCheck) && cells[2][2].equals(pointForCheck) && cells[1][1].equals(Type.NOT_SET)) {
+            cells[1][1] = pointForSet;
+            tempI = 1;
+            tempJ = 1;
+            return true;
+        }
+        else if (cells[1][1].equals(pointForCheck) && cells[2][2].equals(pointForCheck) && cells[0][0].equals(Type.NOT_SET)) {
+            cells[0][0] = pointForSet;
+            tempI = 0;
+            tempJ = 0;
+            return true;
+        }
+        else if (cells[0][2].equals(pointForCheck) && cells[1][1].equals(pointForCheck) && cells[2][0].equals(Type.NOT_SET)) {
+            cells[2][0] = pointForSet;
+            tempI = 2;
+            tempJ = 0;
+            return true;
+        }
+        else if (cells[0][2].equals(pointForCheck) && cells[2][0].equals(pointForCheck) && cells[1][1].equals(Type.NOT_SET)) {
+            cells[1][1] = pointForSet;
+            tempI = 1;
+            tempJ = 1;
+            return true;
+        }
+        else if (cells[1][1].equals(pointForCheck) && cells[2][0].equals(pointForCheck) && cells[0][2].equals(Type.NOT_SET)) {
+            cells[0][2] = pointForSet;
+            tempI = 0;
+            tempJ = 2;
+            return true;
+        }
 
         for (int i = 0; i < SIZE; i++) {
             int count = 0;
             for (int j = 0; j < SIZE; j++) {
                 if (cells[i][j].equals(pointForCheck)) {
                     count++;
-                }
-                if (cells[i][j].equals(Type.NOT_SET)) {
+                } else if (cells[i][j].equals(Type.NOT_SET)) {
+                    tempI = i;
+                    tempJ = j;
+                } else if( cells[i][j].equals(pointForSet)) {
                     tempI = i;
                     tempJ = j;
                 }
+
             }
             if (count == 2 && cells[tempI][tempJ].equals(Type.NOT_SET)) {
                 cells[tempI][tempJ] = pointForSet;
@@ -109,53 +148,19 @@ public class MainActivity extends AppCompatActivity {
             for (int j = 0; j < SIZE; j++) {
                 if (cells[j][i].equals(pointForCheck)) {
                     count++;
-                }
-                if (cells[j][i].equals(Type.NOT_SET)) {
+                }else if (cells[j][i].equals(Type.NOT_SET)) {
+                    tempI = j;
+                    tempJ = i;
+                } else if( cells[j][i].equals(pointForSet)) {
                     tempI = j;
                     tempJ = i;
                 }
+
             }
             if (count == 2 && cells[tempI][tempJ].equals(Type.NOT_SET)) {
                 cells[tempI][tempJ] = pointForSet;
                 return true;
             }
-        }
-
-        if (cells[0][0].equals(pointForCheck) && cells[1][1].equals(pointForCheck) && cells[2][2].equals(Type.NOT_SET)) {
-            cells[2][2] = pointForSet;
-            tempI = 2;
-            tempJ = 2;
-            return true;
-        }
-        if (cells[0][0].equals(pointForCheck) && cells[2][2].equals(pointForCheck) && cells[1][1].equals(Type.NOT_SET)) {
-            cells[1][1] = pointForSet;
-            tempI = 1;
-            tempJ = 1;
-            return true;
-        }
-        if (cells[1][1].equals(pointForCheck) && cells[2][2].equals(pointForCheck) && cells[0][0].equals(Type.NOT_SET)) {
-            cells[0][0] = pointForSet;
-            tempI = 0;
-            tempJ = 0;
-            return true;
-        }
-        if (cells[0][2].equals(pointForCheck) && cells[1][1].equals(pointForCheck) && cells[2][0].equals(Type.NOT_SET)) {
-            cells[2][0] = pointForSet;
-            tempI = 2;
-            tempJ = 0;
-            return true;
-        }
-        if (cells[0][2].equals(pointForCheck) && cells[2][0].equals(pointForCheck) && cells[1][1].equals(Type.NOT_SET)) {
-            cells[1][1] = pointForSet;
-            tempI = 1;
-            tempJ = 1;
-            return true;
-        }
-        if (cells[1][1].equals(pointForCheck) && cells[2][0].equals(pointForCheck) && cells[0][2].equals(Type.NOT_SET)) {
-            cells[0][2] = pointForSet;
-            tempI = 0;
-            tempJ = 2;
-            return true;
         }
         return false;
     }
@@ -276,30 +281,37 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setSmartPoint(String point) {
-        if (!isAlmostWins(Type.X, Type.O)) {
-            if (isAlmostWins(Type.O, Type.O)) {
-            } else if (cells[1][1].equals(Type.NOT_SET)) {
-                cells[1][1] = Type.O;
-                tempI = 1;
-                tempJ = 1;
-            } else if (cells[0][0].equals(Type.NOT_SET)) {
-                cells[0][0] = Type.O;
-                tempI = 0;
-                tempJ = 0;
-            } else if (cells[0][2].equals(Type.NOT_SET)) {
-                cells[0][2] = Type.O;
-                tempI = 0;
-                tempJ = 2;
-            } else if (cells[2][2].equals(Type.NOT_SET)) {
-                cells[2][2] = Type.O;
-                tempI = 2;
-                tempJ = 2;
-            } else if (cells[2][0].equals(Type.NOT_SET)) {
-                cells[2][0] = Type.O;
-                tempI = 2;
-                tempJ = 0;
-            }
+        if (isAlmostWins(Type.O, Type.O)) {
+            buttons[tempI][tempJ].setText(point);
         }
+        else {
+           if (isAlmostWins(Type.X, Type.O)) {
+               buttons[tempI][tempJ].setText(point);
+               return;
+           }
+                if (cells[1][1].equals(Type.NOT_SET)) {
+                    cells[1][1] = Type.O;
+                    tempI = 1;
+                    tempJ = 1;
+                } else if (cells[0][0].equals(Type.NOT_SET)) {
+                    cells[0][0] = Type.O;
+                    tempI = 0;
+                    tempJ = 0;
+                } else if (cells[0][2].equals(Type.NOT_SET)) {
+                    cells[0][2] = Type.O;
+                    tempI = 0;
+                    tempJ = 2;
+                } else if (cells[2][2].equals(Type.NOT_SET)) {
+                    cells[2][2] = Type.O;
+                    tempI = 2;
+                    tempJ = 2;
+                } else if (cells[2][0].equals(Type.NOT_SET)) {
+                    cells[2][0] = Type.O;
+                    tempI = 2;
+                    tempJ = 0;
+                }
+            }
+
         buttons[tempI][tempJ].setText(point);
     }
 
@@ -384,15 +396,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void freeze(boolean clickable) {
-        b1.setClickable(clickable);
-        b2.setClickable(clickable);
-        b3.setClickable(clickable);
-        b4.setClickable(clickable);
-        b5.setClickable(clickable);
-        b6.setClickable(clickable);
-        b7.setClickable(clickable);
-        b8.setClickable(clickable);
-        b9.setClickable(clickable);
+        for (Button[] button : buttons) {
+            for (Button button1 : button) {
+                button1.setClickable(clickable);
+            }
+        }
     }
 }
 
